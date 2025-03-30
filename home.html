@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General Shop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+
+
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+
+
+
+        nav {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        nav button {
+            margin-right: 10px;
+            padding: 8px 15px;
+            cursor: pointer;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav button:hover {
+            background-color: #777;
+        }
+
+        #product-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .product {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .product button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        #cart,
+        #checkout {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        #cart-items {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #cart-items li {
+            margin-bottom: 8px;
+        }
+
+
+
+
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .footer-section p,
+        .footer-section ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            font-size: 14px;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section a {
+            text-decoration: none;
+            color: #ccc;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #555;
+            font-size: 14px;
+        }
+
+
+
+
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {     /*for Tabs */
+
+            /* Header and Nav */
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            nav button {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            /* Product List */
+            #product-list {
+                grid-template-columns: repeat(2, 1fr);
+                /* 2 columns on smaller screens */
+                gap: 15px;
+            }
+
+            /* Individual Product */
+            .product {
+                padding: 8px;
+            }
+
+            .product img {
+                width: 80px;
+                height: 80px;
+            }
+
+            /* Cart & Checkout */
+            #cart,
+            #checkout {
+                width: 100%;
+                padding: 10px;
+            }
+
+            #cart-items li {
+                font-size: 14px;
+            }
+
+            /* Footer */
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-section {
+                margin-bottom: 20px;
+            }
+
+            /* Buttons and Inputs */
+            button,
+            input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                margin-top: 5px;
+            }
+        }
+
+
+
+
+        /* Extra Small Screens (Mobile Phones) */
+        @media (max-width: 480px) {
+
+            /* Product List - 1 Column for Very Small Screens */
+            #product-list {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 20px;
+            }
+
+            .product h3 {
+                font-size: 16px;
+            }
+
+            .product p {
+                font-size: 14px;
+            }
+
+            /* Cart & Checkout Smaller Font */
+            #cart h2,
+            #checkout h2 {
+                font-size: 18px;
+            }
+
+            #cart-items li {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+
+
+<body>
+    <header>
+        <h1>General Shop</h1>
+        <nav>
+            <button onclick="showHome()">Home</button>
+            <button onclick="filterCategory('food')">Food</button>
+            <button onclick="filterCategory('clothing')">Clothing</button>
+            <button onclick="filterCategory('electronics')">Electronics</button>
+        </nav>
+        <div>
+            <button onclick="viewCart()">View Cart (<span id="cart-count">0</span>)</button>
+        </div>
+    </header>
+
+
+
+    <main>
+        <div id="product-list">
+            Products will be rendered here
+        </div>
+        <div id="cart" style="display:none;">
+            <h2>Shopping Cart</h2>
+            <ul id="cart-items"></ul>
+            <p>Total: $<span id="cart-total">0.00</span></p>
+            <button onclick="checkout()">Checkout</button>
+            <button onclick="closeCart()">Continue Shopping</button>
+            <button onclick="clearCart()"
+                style="margin-top: 10px; background-color: #ff4444; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 5px;">Clear
+                Cart
+            </button>
+        </div>
+
+
+
+        <div id="checkout" style="display:none;">
+            <h2>Checkout</h2>
+            <p>Enter mock payment details</p>
+            <input type="text" placeholder="Card Number" /><br>
+            <input type="text" placeholder="Expiration Date" /><br>
+            <input type="text" placeholder="CVV" /><br>
+            <button onclick="completePurchase()">Pay Now</button>
+        </div>
+    </main>
+
+
+
+
+
+    <script>
+        const products = [
+            { id: 1, name: "Apple", price: 1.2, category: "food", image: "apple.jpg" },
+            { id: 2, name: "T-shirt", price: 15.0, category: "clothing", image: "tshirt.jpg" },
+            { id: 3, name: "Headphones", price: 45.0, category: "electronics", image: "headphones.jpg" },
+            { id: 4, name: "Banana", price: 0.8, category: "food", image: "banana.jpg" },
+            { id: 5, name: "Jeans", price: 40.0, category: "clothing", image: "jeans.jpg" },
+            { id: 6, name: "Laptop", price: 500.0, category: "electronics", image: "laptop.jpg" },
+            { id: 7, name: "Bread", price: 1.5, category: "food", image: "bread.jpg" },
+            { id: 8, name: "Jacket", price: 60.0, category: "clothing", image: "jacket.jpg" },
+            { id: 9, name: "Smartphone", price: 300.0, category: "electronics", image: "smartphone.jpg" },
+            { id: 10, name: "Milk", price: 1.0, category: "food", image: "milk.jpg" }
+        ];
+
+        let cart = [];
+
+
+
+
+        function filterCategory(category) {
+            const filtered = products.filter(p => p.category === category);
+            renderProducts(filtered);
+            document.getElementById('product-list').style.display = 'grid';  // Make sure product list is visible
+            document.getElementById('cart').style.display = 'none';  // Hide cart if open
+            document.getElementById('checkout').style.display = 'none';  // Hide checkout if open
+        }
+
+
+
+        function renderProducts(items) {
+            const container = document.getElementById('product-list');
+            container.style.display = 'grid';  // Ensure product list is displayed properly
+            container.innerHTML = '';  // Clear existing content
+            items.forEach(item => {
+                container.innerHTML += `<div class='product'>
+            <img src='${item.image}' alt='${item.name}' style='width:100px; height:100px;' />
+            <h3>${item.name}</h3>
+            <p>$${item.price.toFixed(2)}</p>
+            <button onclick='addToCart(${item.id})'>Add to Cart</button>
+        </div>`;
+            });
+
+            // Hide cart and checkout when switching to products
+            document.getElementById('cart').style.display = 'none';
+            document.getElementById('checkout').style.display = 'none';
+        }
+
+
+
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            cart.push(product);
+            updateCart();
+        }
+
+
+
+        function updateCart() {
+            const cartCount = document.getElementById('cart-count');
+            cartCount.textContent = cart.length;
+
+            const cartItemsContainer = document.getElementById('cart-items');
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+            cart.forEach(item => {
+                cartItemsContainer.innerHTML += `<li>${item.name} - $${item.price.toFixed(2)}</li>`;
+                total += item.price;
+            });
+            document.getElementById('cart-total').textContent = total.toFixed(2);
+        }
+
+        function viewCart() {
+            document.getElementById('cart').style.display = 'block';  // Show the cart
+            document.getElementById('checkout').style.display = 'none';  // Hide the checkout
+            document.getElementById('product-list').style.display = 'none';  // Hide the product list
+        }
+
+
+
+
+        function updateCart() {
+            const cartCount = document.getElementById('cart-count');
+            cartCount.textContent = cart.length;
+
+            const cartItemsContainer = document.getElementById('cart-items');
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                cartItemsContainer.innerHTML += `
+            <li>
+                ${item.name} - $${item.price.toFixed(2)}
+                <button onclick="removeFromCart(${index})" style="margin-left: 10px; background-color: red; color: white; border: none; padding: 3px 6px; cursor: pointer;">X</button>
+            </li>`;
+                total += item.price;
+            });
+            document.getElementById('cart-total').textContent = total.toFixed(2);
+        }
+
+
+
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);  // Remove item from the cart array
+            updateCart();  // Re-render the updated cart
+        }
+
+
+        function closeCart() {
+            document.getElementById('cart').style.display = 'none';  // Hide the cart
+            document.getElementById('product-list').style.display = 'grid';  // Show product list in grid again
+            renderProducts(products);  // Re-render product list to restore original layout
+        }
+
+
+
+        function clearCart() {
+            cart = [];  // Empty the cart
+            updateCart();
+        }
+
+
+
+        function checkout() {
+            document.getElementById('cart').style.display = 'none';
+            document.getElementById('checkout').style.display = 'block';
+        }
+
+        function completePurchase() {
+            alert("Purchase completed! Thank you for shopping.");
+            cart = [];
+            updateCart();
+            document.getElementById('checkout').style.display = 'none';
+            renderProducts(products);
+        }
+
+        window.onload = () => { renderProducts(products); };
+
+
+        function showHome() {
+            renderProducts(products);  // Show all products
+            document.getElementById('product-list').style.display = 'grid';
+            document.getElementById('cart').style.display = 'none';
+            document.getElementById('checkout').style.display = 'none';
+        }
+
+
+
+
+
+    </script>
+
+</body>
+
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>About Us</h3>
+            <p>We provide quality products at the best prices. Shop with confidence and convenience!</p>
+        </div>
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#" onclick="showHome()">Home</a></li>
+                <li><a href="#" onclick="filterCategory('food')">Food</a></li>
+                <li><a href="#" onclick="filterCategory('clothing')">Clothing</a></li>
+                <li><a href="#" onclick="filterCategory('electronics')">Electronics</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Contact Us</h3>
+            <p>Email: support@simplestore.com</p>
+            <p>Phone: +123 456 7890</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 General Shop. All rights reserved.</p>
+    </div>
+</footer>
+
+
+</html>
+
+
